@@ -1,10 +1,26 @@
 import { useSearch } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { challenger } from "../service/service";
 
 export const SupporterSignUp = () => {
-  const search = useSearch({
+  const [userId, setUserId] = useState<string | null>(null);
+  const userToken = useSearch({
     from: "/",
     select: (search) => search.user,
   });
+
+  console.log(userId);
+
+  useEffect(() => {
+    console.log(userToken);
+
+    const getUser = async () => {
+      const user = await challenger.getUser();
+      setUserId(user.id);
+    };
+
+    getUser();
+  }, [userToken]);
 
   return (
     <section className="h-full">
