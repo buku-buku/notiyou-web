@@ -8,12 +8,24 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 
+// Create Virtual Routes
+
+const OauthLazyImport = createFileRoute('/oauth')()
+
 // Create/Update Routes
+
+const OauthLazyRoute = OauthLazyImport.update({
+  id: '/oauth',
+  path: '/oauth',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/oauth.lazy').then((d) => d.Route))
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -32,6 +44,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/oauth': {
+      id: '/oauth'
+      path: '/oauth'
+      fullPath: '/oauth'
+      preLoaderRoute: typeof OauthLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +58,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/oauth': typeof OauthLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/oauth': typeof OauthLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/oauth': typeof OauthLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/oauth'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/oauth'
+  id: '__root__' | '/' | '/oauth'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OauthLazyRoute: typeof OauthLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OauthLazyRoute: OauthLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +101,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/oauth"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/oauth": {
+      "filePath": "oauth.lazy.tsx"
     }
   }
 }

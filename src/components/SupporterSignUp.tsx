@@ -10,6 +10,13 @@ export const SupporterSignUp = () => {
   const handleSignUpSupporter = async () => {
     const user = await challenger.getUser(userToken);
 
+    function loginWithKakao() {
+      Kakao.Auth.authorize({
+        redirectUri: "http://localhost:5173/oauth",
+      });
+    }
+
+    loginWithKakao();
     await Promise.resolve({
       userId: user.id,
     });
