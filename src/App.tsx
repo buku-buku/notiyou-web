@@ -1,7 +1,8 @@
+import { SupporterSignUp } from "./components/SupporterSignUp";
 import "./index.css";
 
 function App() {
-  return <div className="text-2xl">App</div>;
+  return <SupporterSignUp />;
 }
 
 export default App;
