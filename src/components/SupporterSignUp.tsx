@@ -6,8 +6,6 @@ export const SupporterSignUp = () => {
     select: (search) => search.user,
   });
 
-  console.log(search);
-
   return (
     <section className="h-full">
       <div className="container mx-auto h-full flex justify-center items-center">
