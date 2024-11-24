@@ -1,6 +1,14 @@
 import { useSearch } from "@tanstack/react-router";
 import { challenger } from "../service/service";
 
+// Kakao SDK를 불러오기 위한 타입 선언
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Kakao: any;
+  }
+}
+
 export const SupporterSignUp = () => {
   const userToken = useSearch({
     from: "/",
@@ -11,8 +19,8 @@ export const SupporterSignUp = () => {
     const user = await challenger.getUser(userToken);
 
     function loginWithKakao() {
-      Kakao.Auth.authorize({
-        redirectUri: "http://localhost:5173/oauth",
+      window.Kakao.Auth.authorize({
+        redirectUri: import.meta.env.VITE_REDIRECT_URI,
       });
     }
 
