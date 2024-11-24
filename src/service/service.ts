@@ -1,12 +1,15 @@
 import { supabase } from "./client";
 
-export const connectChallenger = async (userId: string) => {
-  console.log(userId + "connected to supporters");
-};
-
-const getKakaoToken = async () => {
+const getKakaoToken = async (code: string) => {
   const result = await fetch("https://kauth.kakao.com/oauth/token", {
     method: "POST",
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: import.meta.env.VITE_KAKAO_REST_API_KEY,
+      client_secret: import.meta.env.VITE_KAKAO_CLIENT_SECRET,
+      redirect_uri: import.meta.env.VITE_KAKAO_REDIRECT_URI,
+      code,
+    }),
   });
 
   const { id_token } = await result.json();
@@ -14,8 +17,8 @@ const getKakaoToken = async () => {
   return id_token;
 };
 
-export const singUpWithKakao = async () => {
-  const token = await getKakaoToken();
+export const singUpWithKakao = async (code: string) => {
+  const token = await getKakaoToken(code);
 
   const {
     data: { session },
@@ -30,4 +33,8 @@ export const singUpWithKakao = async () => {
   }
 
   return { session, error };
+};
+
+export const connectWithChallenger = async (challengerId: string) => {
+  console.log(challengerId + "connected to supporters");
 };

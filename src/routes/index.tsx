@@ -4,7 +4,7 @@ import { SupporterSignUp } from "../components/SupporterSignUp";
 import { z } from "zod";
 
 const supporterSignUpSchema = z.object({
-  user: z.string(),
+  challengerId: z.string(),
 });
 
 type SupporterSignUpSearch = z.infer<typeof supporterSignUpSchema>;

@@ -1,5 +1,4 @@
 import { useSearch } from "@tanstack/react-router";
-import { challenger } from "../service/service";
 
 // Kakao SDK를 불러오기 위한 타입 선언
 declare global {
@@ -10,24 +9,20 @@ declare global {
 }
 
 export const SupporterSignUp = () => {
-  const userToken = useSearch({
+  const challengerId = useSearch({
     from: "/",
-    select: (search) => search.user,
+    select: (search) => search.challengerId,
   });
 
   const handleSignUpSupporter = async () => {
-    const user = await challenger.getUser(userToken);
-
+    console.log("save in local storage" + challengerId);
     function loginWithKakao() {
       window.Kakao.Auth.authorize({
-        redirectUri: import.meta.env.VITE_REDIRECT_URI,
+        redirectUri: import.meta.env.VITE_KAKAO_REDIRECT_URI,
       });
     }
 
     loginWithKakao();
-    await Promise.resolve({
-      userId: user.id,
-    });
   };
 
   return (
